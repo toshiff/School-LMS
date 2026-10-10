@@ -1,0 +1,295 @@
+{
+ "actions": [],
+ "creation": "2026-10-10 12:30:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "exam_title",
+  "exam_type",
+  "academic_year",
+  "column_break_class",
+  "class",
+  "section",
+  "subject",
+  "section_schedule",
+  "exam_date",
+  "start_time",
+  "duration_minutes",
+  "column_break_schedule",
+  "start_datetime",
+  "end_datetime",
+  "section_questions",
+  "questions",
+  "total_marks",
+  "column_break_marks",
+  "passing_marks",
+  "section_settings",
+  "shuffle_questions",
+  "shuffle_options",
+  "column_break_settings",
+  "max_violations",
+  "publish_result",
+  "section_instructions",
+  "instructions",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "exam_title",
+   "fieldtype": "Data",
+   "label": "Exam Title",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "exam_type",
+   "fieldtype": "Link",
+   "label": "Exam Type",
+   "options": "Exam Type",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "label": "Academic Year",
+   "options": "Academic Year",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "column_break_class",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "class",
+   "fieldtype": "Link",
+   "label": "Class",
+   "options": "Class",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "section",
+   "fieldtype": "Link",
+   "label": "Section",
+   "options": "Student Section",
+   "in_standard_filter": 1,
+   "description": "Leave empty for all sections of the class."
+  },
+  {
+   "fieldname": "subject",
+   "fieldtype": "Link",
+   "label": "Subject",
+   "options": "Subject",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "section_schedule",
+   "fieldtype": "Section Break",
+   "label": "Schedule"
+  },
+  {
+   "fieldname": "exam_date",
+   "fieldtype": "Date",
+   "label": "Exam Date",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Time",
+   "label": "Start Time",
+   "reqd": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "duration_minutes",
+   "fieldtype": "Int",
+   "label": "Duration (Minutes)",
+   "reqd": 1,
+   "allow_on_submit": 1,
+   "non_negative": 1
+  },
+  {
+   "fieldname": "column_break_schedule",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_datetime",
+   "fieldtype": "Datetime",
+   "label": "Starts At",
+   "read_only": 1,
+   "hidden": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "end_datetime",
+   "fieldtype": "Datetime",
+   "label": "Ends At",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "description": "Students who join late get only the time left until this moment."
+  },
+  {
+   "fieldname": "section_questions",
+   "fieldtype": "Section Break",
+   "label": "Questions"
+  },
+  {
+   "fieldname": "questions",
+   "fieldtype": "Table",
+   "label": "Questions",
+   "options": "Online Exam Question",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_marks",
+   "fieldtype": "Float",
+   "label": "Total Marks",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_marks",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "passing_marks",
+   "fieldtype": "Float",
+   "label": "Passing Marks",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Settings",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "shuffle_questions",
+   "fieldtype": "Check",
+   "label": "Shuffle Question Order",
+   "default": "1"
+  },
+  {
+   "fieldname": "shuffle_options",
+   "fieldtype": "Check",
+   "label": "Shuffle Options",
+   "default": "1"
+  },
+  {
+   "fieldname": "column_break_settings",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "max_violations",
+   "fieldtype": "Int",
+   "label": "Auto-submit After Leaving Exam (Times)",
+   "default": "3",
+   "non_negative": 1,
+   "description": "Switching tab, minimising or leaving full screen counts once. 0 = record only, never auto-submit."
+  },
+  {
+   "fieldname": "publish_result",
+   "fieldtype": "Check",
+   "label": "Publish Result",
+   "allow_on_submit": 1,
+   "description": "Students see their score once their paper is fully evaluated. Tick it before the exam for instant results on objective-only papers."
+  },
+  {
+   "fieldname": "section_instructions",
+   "fieldtype": "Section Break",
+   "label": "Instructions",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "instructions",
+   "fieldtype": "Text Editor",
+   "label": "Instructions for Students"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Online Exam",
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-10 12:30:00.000000",
+ "modified_by": "Administrator",
+ "module": "Online Exam",
+ "name": "Online Exam",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1
+  },
+  {
+   "role": "Examination Admin",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1
+  },
+  {
+   "role": "Academic Admin",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1
+  },
+  {
+   "role": "Teacher",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:OEX-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "is_submittable": 1,
+ "title_field": "exam_title",
+ "show_title_field_in_link": 1,
+ "search_fields": "exam_title,class,subject",
+ "track_changes": 1
+}

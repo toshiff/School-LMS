@@ -1,21 +1,30 @@
 {
  "actions": [],
- "autoname": "format:ES-{#####}",
- "creation": "2026-10-09 15:30:00.000000",
+ "creation": "2026-10-10 12:30:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "online_exam",
+  "exam_title",
+  "subject",
   "student",
-  "class_name",
+  "student_name",
+  "roll_number",
+  "column_break_student",
+  "class",
+  "section",
+  "academic_year",
+  "user",
+  "section_status",
   "status",
-  "column_break_1",
+  "submit_mode",
   "started_at",
   "deadline",
   "submitted_at",
-  "section_result",
+  "column_break_status",
   "total_marks",
-  "column_break_2",
   "score",
+  "pending_evaluation",
   "section_proctoring",
   "violation_count",
   "violation_log",
@@ -24,36 +33,107 @@
  ],
  "fields": [
   {
-   "fieldname": "student",
+   "fieldname": "online_exam",
    "fieldtype": "Link",
+   "label": "Online Exam",
+   "options": "Online Exam",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Student (User)",
-   "options": "User",
-   "read_only": 1,
-   "search_index": 1
+   "search_index": 1,
+   "read_only": 1
   },
   {
-   "fieldname": "class_name",
+   "fieldname": "exam_title",
    "fieldtype": "Data",
+   "label": "Exam Title",
+   "read_only": 1
+  },
+  {
+   "fieldname": "subject",
+   "fieldtype": "Link",
+   "label": "Subject",
+   "options": "Subject",
+   "in_standard_filter": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "student",
+   "fieldtype": "Link",
+   "label": "Student",
+   "options": "Student",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Class",
+   "search_index": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "student_name",
+   "fieldtype": "Data",
+   "label": "Student Name",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "roll_number",
+   "fieldtype": "Data",
+   "label": "Roll Number",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_student",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "class",
+   "fieldtype": "Link",
+   "label": "Class",
+   "options": "Class",
+   "in_standard_filter": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "section",
+   "fieldtype": "Link",
+   "label": "Section",
+   "options": "Student Section",
+   "read_only": 1
+  },
+  {
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "label": "Academic Year",
+   "options": "Academic Year",
+   "read_only": 1
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User",
+   "search_index": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_status",
+   "fieldtype": "Section Break",
+   "label": "Status"
   },
   {
    "fieldname": "status",
    "fieldtype": "Select",
+   "label": "Status",
+   "options": "In Progress\nSubmitted\nEvaluated",
+   "default": "In Progress",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Status",
-   "options": "In Progress\nSubmitted\nAuto Submitted",
-   "read_only": 1,
-   "search_index": 1
+   "read_only": 1
   },
   {
-   "fieldname": "column_break_1",
-   "fieldtype": "Column Break"
+   "fieldname": "submit_mode",
+   "fieldtype": "Select",
+   "label": "Submitted By",
+   "options": "\nStudent\nTime Up\nProctoring",
+   "read_only": 1
   },
   {
    "fieldname": "started_at",
@@ -74,9 +154,8 @@
    "read_only": 1
   },
   {
-   "fieldname": "section_result",
-   "fieldtype": "Section Break",
-   "label": "Result"
+   "fieldname": "column_break_status",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "total_marks",
@@ -85,27 +164,29 @@
    "read_only": 1
   },
   {
-   "fieldname": "column_break_2",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "score",
    "fieldtype": "Float",
-   "in_list_view": 1,
    "label": "Score",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "pending_evaluation",
+   "fieldtype": "Int",
+   "label": "Answers Pending Evaluation",
    "read_only": 1
   },
   {
    "fieldname": "section_proctoring",
    "fieldtype": "Section Break",
-   "label": "Proctoring"
+   "label": "Proctoring",
+   "collapsible": 1
   },
   {
-   "default": "0",
    "fieldname": "violation_count",
    "fieldtype": "Int",
-   "in_list_view": 1,
    "label": "Times Left Exam",
+   "default": "0",
    "read_only": 1
   },
   {
@@ -127,28 +208,50 @@
    "read_only": 1
   }
  ],
- "in_create": 1,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-09 15:30:00.000000",
+ "modified": "2026-10-10 12:30:00.000000",
  "modified_by": "Administrator",
  "module": "Online Exam",
  "name": "Exam Submission",
- "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
-   "delete": 1,
-   "export": 1,
-   "print": 1,
+   "role": "System Manager",
    "read": 1,
    "report": 1,
-   "role": "System Manager",
-   "share": 1
+   "export": 1,
+   "print": 1,
+   "delete": 1
+  },
+  {
+   "role": "Examination Admin",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "Academic Admin",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "Teacher",
+   "read": 1,
+   "report": 1,
+   "print": 1
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 0
+ "autoname": "prompt",
+ "naming_rule": "Set by user",
+ "title_field": "student_name",
+ "show_title_field_in_link": 1,
+ "search_fields": "student_name,online_exam",
+ "in_create": 1
 }

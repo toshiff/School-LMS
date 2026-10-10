@@ -1,49 +1,103 @@
 {
  "actions": [],
- "autoname": "format:EQ-{#####}",
- "creation": "2026-10-09 15:30:00.000000",
+ "creation": "2026-10-10 12:30:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "class_name",
+  "class",
   "subject",
-  "column_break_1",
+  "topic",
+  "column_break_type",
+  "question_type",
+  "difficulty",
   "marks",
+  "negative_marks",
+  "enabled",
   "section_question",
   "question",
-  "option_a",
-  "option_b",
-  "option_c",
-  "option_d",
-  "correct_option"
+  "question_image",
+  "question_summary",
+  "section_options",
+  "options",
+  "section_answer",
+  "accepted_answers",
+  "numeric_tolerance",
+  "section_subjective",
+  "answer_word_limit",
+  "drawing_background",
+  "model_answer"
  ],
  "fields": [
   {
-   "fieldname": "class_name",
-   "fieldtype": "Data",
+   "fieldname": "class",
+   "fieldtype": "Link",
+   "label": "Class",
+   "options": "Class",
+   "reqd": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Class",
-   "reqd": 1,
    "search_index": 1
   },
   {
    "fieldname": "subject",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
+   "label": "Subject",
+   "options": "Subject",
+   "reqd": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Subject"
+   "search_index": 1
   },
   {
-   "fieldname": "column_break_1",
+   "fieldname": "topic",
+   "fieldtype": "Link",
+   "label": "Topic",
+   "options": "Topic",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "column_break_type",
    "fieldtype": "Column Break"
   },
   {
-   "default": "1",
+   "fieldname": "question_type",
+   "fieldtype": "Select",
+   "label": "Question Type",
+   "options": "Single Choice (MCQ)\nMultiple Choice (MSQ)\nTrue / False\nFill in the Blank\nNumeric\nShort Answer\nLong Answer\nDrawing",
+   "default": "Single Choice (MCQ)",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "difficulty",
+   "fieldtype": "Select",
+   "label": "Difficulty",
+   "options": "\nEasy\nMedium\nHard",
+   "in_standard_filter": 1
+  },
+  {
    "fieldname": "marks",
    "fieldtype": "Float",
    "label": "Marks",
+   "default": "1",
+   "reqd": 1,
    "non_negative": 1
+  },
+  {
+   "fieldname": "negative_marks",
+   "fieldtype": "Float",
+   "label": "Negative Marks",
+   "default": "0",
+   "non_negative": 1,
+   "depends_on": "eval:[\"Single Choice (MCQ)\", \"Multiple Choice (MSQ)\", \"True / False\", \"Fill in the Blank\", \"Numeric\"].includes(doc.question_type)",
+   "description": "Deducted for a wrong answer. Unanswered questions are never penalised."
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1"
   },
   {
    "fieldname": "section_question",
@@ -52,68 +106,151 @@
   },
   {
    "fieldname": "question",
-   "fieldtype": "Small Text",
-   "in_list_view": 1,
+   "fieldtype": "Text Editor",
    "label": "Question",
    "reqd": 1
   },
   {
-   "fieldname": "option_a",
-   "fieldtype": "Data",
-   "label": "Option A",
-   "reqd": 1
+   "fieldname": "question_image",
+   "fieldtype": "Attach Image",
+   "label": "Question Image",
+   "description": "Optional diagram, map or picture shown with the question."
   },
   {
-   "fieldname": "option_b",
+   "fieldname": "question_summary",
    "fieldtype": "Data",
-   "label": "Option B",
-   "reqd": 1
+   "label": "Summary",
+   "read_only": 1,
+   "hidden": 1,
+   "length": 140
   },
   {
-   "fieldname": "option_c",
-   "fieldtype": "Data",
-   "label": "Option C",
-   "reqd": 1
+   "fieldname": "section_options",
+   "fieldtype": "Section Break",
+   "label": "Options",
+   "depends_on": "eval:[\"Single Choice (MCQ)\", \"Multiple Choice (MSQ)\", \"True / False\"].includes(doc.question_type)"
   },
   {
-   "fieldname": "option_d",
-   "fieldtype": "Data",
-   "label": "Option D",
-   "reqd": 1
+   "fieldname": "options",
+   "fieldtype": "Table",
+   "label": "Options",
+   "options": "Exam Question Option",
+   "description": "Tick Correct for the right option. Multiple Choice (MSQ) can have more than one correct option; the student must pick all of them."
   },
   {
-   "fieldname": "correct_option",
-   "fieldtype": "Select",
-   "label": "Correct Option",
-   "options": "A\nB\nC\nD",
-   "reqd": 1
+   "fieldname": "section_answer",
+   "fieldtype": "Section Break",
+   "label": "Correct Answer",
+   "depends_on": "eval:[\"Fill in the Blank\", \"Numeric\"].includes(doc.question_type)"
+  },
+  {
+   "fieldname": "accepted_answers",
+   "fieldtype": "Small Text",
+   "label": "Accepted Answers",
+   "description": "One accepted answer per line. Matching ignores capital letters and extra spaces."
+  },
+  {
+   "fieldname": "numeric_tolerance",
+   "fieldtype": "Float",
+   "label": "Allowed Difference",
+   "depends_on": "eval:doc.question_type==\"Numeric\"",
+   "description": "For example 0.01 accepts 3.14 when the answer is 3.141"
+  },
+  {
+   "fieldname": "section_subjective",
+   "fieldtype": "Section Break",
+   "label": "Subjective Answer",
+   "depends_on": "eval:[\"Short Answer\", \"Long Answer\", \"Drawing\"].includes(doc.question_type)"
+  },
+  {
+   "fieldname": "answer_word_limit",
+   "fieldtype": "Int",
+   "label": "Word Limit",
+   "depends_on": "eval:[\"Short Answer\", \"Long Answer\"].includes(doc.question_type)",
+   "description": "Shown to the student as a guide. 0 = no limit."
+  },
+  {
+   "fieldname": "drawing_background",
+   "fieldtype": "Attach Image",
+   "label": "Drawing Background",
+   "depends_on": "eval:doc.question_type==\"Drawing\"",
+   "description": "Optional image the student draws on, e.g. an outline map or an unlabelled diagram."
+  },
+  {
+   "fieldname": "model_answer",
+   "fieldtype": "Text Editor",
+   "label": "Model Answer / Marking Guide",
+   "description": "Visible only to teachers while evaluating."
   }
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-09 15:30:00.000000",
+ "modified": "2026-10-10 12:30:00.000000",
  "modified_by": "Administrator",
  "module": "Online Exam",
  "name": "Exam Question",
- "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "import": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
    "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
    "share": 1,
-   "write": 1
+   "import": 1
+  },
+  {
+   "role": "Examination Admin",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "import": 1
+  },
+  {
+   "role": "Academic Admin",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "import": 1
+  },
+  {
+   "role": "Teacher",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "import": 1
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
+ "autoname": "format:EQ-{#####}",
+ "naming_rule": "Expression",
+ "title_field": "question_summary",
+ "show_title_field_in_link": 1,
+ "search_fields": "question_summary,subject,question_type",
  "track_changes": 1
 }

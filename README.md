@@ -1,24 +1,45 @@
-# School LMS – Online Exam (proof of concept)
+# School LMS – Online Examination
 
-- **Exam Question**: class-wise MCQ question bank (4 options, correct option, marks).
-- **Online Exam page** (`/app/online-exam`): pick a class, get 5 random questions, 10-minute timer, submit.
-- **Exam Submission**: one record per attempt, with each question, the student's answer, the correct answer and marks.
+Online exams on top of **School Edtech** (`school_edtech`). Requires that app on the same site.
 
-## Install (on a test site)
+## How it links to School Edtech
+
+| Here | Comes from |
+|---|---|
+| Logged-in student | `Student` where `email_address` = login user |
+| Class, Section, Roll No., Academic Year | Student's `academic_details` (Current Class CT); the row whose Academic Year is enabled |
+| Class / Subject / Section / Exam Type / Topic | `Class`, `Subject`, `Student Section`, `Exam Type`, `Topic` |
+| Roles | Student, Teacher, Examination Admin, Academic Admin, System Manager |
+
+## DocTypes
+
+- **Exam Question** – question bank per Class + Subject (+ Topic, Difficulty). Types:
+  Single Choice (MCQ), Multiple Choice (MSQ), True / False, Fill in the Blank, Numeric (auto-marked);
+  Short Answer, Long Answer, Drawing (teacher-marked). Images, negative marks, word limit,
+  drawing background (e.g. outline map), model answer / marking guide.
+- **Online Exam** (submittable) – Class, optional Section (empty = all sections), Subject, Academic Year,
+  Exam Date + Start Time + Duration. A student who joins late only gets the time left until the end.
+  Questions picked by hand or with **Add Questions from Bank** (random by topic/type/difficulty).
+  Shuffle questions/options, auto-submit after N times leaving the exam, Publish Result.
+  Date/time/duration can be changed after submit (postpone/extend); running attempts follow.
+- **Exam Submission** – one per student per exam (`<exam>-<student>`), answers, marks, status
+  (In Progress → Submitted → Evaluated), proctoring log.
+
+## Pages
+
+- `/app/online-exam` – student: details, live/upcoming/finished exams with countdowns, exam screen
+  (question palette, mark for review, autosave every ~25 s + device backup, drawing pad, full-screen lockdown).
+- `/app/exam-evaluation` – teacher: mark subjective and drawing answers, override auto marks, remarks.
+- Workspace **Online Exam** for teachers/admins.
+
+## Install
 
 ```bash
 cd ~/frappe-bench
-bench get-app ~/school_lms
-bench --site <test-site> install-app school_lms
-bench --site <test-site> migrate
-sudo supervisorctl restart frappe-bench-web: frappe-bench-workers:
+bench get-app https://github.com/toshiff/School-LMS
+bench --site <site> install-app school_lms
+bench --site <site> migrate
 ```
 
-## Test
-
-1. Open **Exam Question** and add at least 5 questions for a class (e.g. `Class 10`).
-2. Log in as a test user (a System User without the System Manager role) and open `/app/online-exam`.
-3. Pick the class, answer, submit (or let the timer run out).
-4. As admin, open **Exam Submission** to see answers stored per question.
-
-Settings are constants at the top of `school_lms/api.py` (`EXAM_MINUTES`, `QUESTION_COUNT`, `GRACE_SECONDS`).
+The scheduler must be enabled (`bench --site <site> enable-scheduler`) so attempts whose time ran out
+are submitted automatically.

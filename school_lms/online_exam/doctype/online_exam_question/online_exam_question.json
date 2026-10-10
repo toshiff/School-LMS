@@ -1,0 +1,74 @@
+{
+ "actions": [],
+ "creation": "2026-10-10 12:30:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "question",
+  "question_summary",
+  "question_type",
+  "marks",
+  "negative_marks"
+ ],
+ "fields": [
+  {
+   "fieldname": "question",
+   "fieldtype": "Link",
+   "label": "Question",
+   "options": "Exam Question",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "question_summary",
+   "fieldtype": "Data",
+   "label": "Summary",
+   "fetch_from": "question.question_summary",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "question_type",
+   "fieldtype": "Data",
+   "label": "Type",
+   "fetch_from": "question.question_type",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "marks",
+   "fieldtype": "Float",
+   "label": "Marks",
+   "fetch_from": "question.marks",
+   "fetch_if_empty": 1,
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "negative_marks",
+   "fieldtype": "Float",
+   "label": "Negative",
+   "fetch_from": "question.negative_marks",
+   "fetch_if_empty": 1,
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-10 12:30:00.000000",
+ "modified_by": "Administrator",
+ "module": "Online Exam",
+ "name": "Online Exam Question",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 1
+}

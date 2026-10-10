@@ -4,13 +4,20 @@
  "docstatus": 0,
  "doctype": "Page",
  "idx": 0,
- "modified": "2026-10-09 15:30:00.000000",
+ "modified": "2026-10-10 12:30:00.000000",
  "modified_by": "Administrator",
  "module": "Online Exam",
  "name": "online-exam",
  "owner": "Administrator",
  "page_name": "online-exam",
- "roles": [],
+ "roles": [
+  {
+   "role": "Student"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
  "script": null,
  "standard": "Yes",
  "style": null,

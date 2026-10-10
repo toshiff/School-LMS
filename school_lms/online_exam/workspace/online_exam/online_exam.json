@@ -1,0 +1,68 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"oe_h1\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Online Exam</b></span>\", \"col\": 12}}, {\"id\": \"oe_s1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Question Bank\", \"col\": 3}}, {\"id\": \"oe_s2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Online Exams\", \"col\": 3}}, {\"id\": \"oe_s3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Evaluate Answers\", \"col\": 3}}, {\"id\": \"oe_s4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Submissions\", \"col\": 3}}]",
+ "creation": "2026-10-10 12:30:00.000000",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "education",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Online Exam",
+ "links": [],
+ "modified": "2026-10-10 12:30:00.000000",
+ "modified_by": "Administrator",
+ "module": "Online Exam",
+ "name": "Online Exam",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Teacher"
+  },
+  {
+   "role": "Examination Admin"
+  },
+  {
+   "role": "Academic Admin"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "sequence_id": 30.0,
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Question Bank",
+   "link_to": "Exam Question",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Online Exams",
+   "link_to": "Online Exam",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "label": "Evaluate Answers",
+   "link_to": "exam-evaluation",
+   "type": "Page"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Submissions",
+   "link_to": "Exam Submission",
+   "type": "DocType"
+  }
+ ],
+ "title": "Online Exam"
+}
