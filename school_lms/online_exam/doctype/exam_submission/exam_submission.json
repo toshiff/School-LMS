@@ -16,6 +16,9 @@
   "total_marks",
   "column_break_2",
   "score",
+  "section_proctoring",
+  "violation_count",
+  "violation_log",
   "section_answers",
   "answers"
  ],
@@ -90,6 +93,25 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Score",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_proctoring",
+   "fieldtype": "Section Break",
+   "label": "Proctoring"
+  },
+  {
+   "default": "0",
+   "fieldname": "violation_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Times Left Exam",
+   "read_only": 1
+  },
+  {
+   "fieldname": "violation_log",
+   "fieldtype": "Long Text",
+   "label": "Violation Log",
    "read_only": 1
   },
   {

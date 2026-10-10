@@ -9,6 +9,16 @@ EXAM_MINUTES = 10
 QUESTION_COUNT = 5
 GRACE_SECONDS = 30  # allowance for slow networks after the deadline
 VALID_OPTIONS = ("A", "B", "C", "D")
+MAX_VIOLATIONS = 3  # leaving the exam this many times submits it automatically
+
+# Reason codes sent by the exam page; only these texts are ever stored.
+VIOLATION_REASONS = {
+	"tab": "Switched tab or minimised the browser",
+	"blur": "Left the exam window",
+	"fullscreen": "Exited full screen",
+	"route": "Navigated away from the exam page",
+	"resume": "Reopened the exam after leaving the page",
+}
 
 
 def _require_login():
@@ -44,7 +54,9 @@ def start_exam(class_name):
 	if running:
 		deadline = get_datetime(running.deadline)
 		if add_to_date(deadline, seconds=GRACE_SECONDS) > now:
-			return _paper(running.name, deadline, now)
+			# Closing the tab and coming back is itself a way of leaving the exam.
+			count = _add_violation(running.name, user, "resume")
+			return _paper(running.name, deadline, now, count)
 		_close(running.name, now)
 
 	names = frappe.get_all(
@@ -92,7 +104,7 @@ def start_exam(class_name):
 	return _paper(doc.name, deadline, now)
 
 
-def _paper(submission, deadline, now):
+def _paper(submission, deadline, now, violation_count=0):
 	"""Questions for an attempt, in its stored order. Never includes correct answers."""
 	order = frappe.get_all(
 		"Exam Submission Answer",
@@ -125,7 +137,39 @@ def _paper(submission, deadline, now):
 		"submission": submission,
 		"questions": questions,
 		"remaining_seconds": max(0, cint(time_diff_in_seconds(deadline, now))),
+		"violation_count": cint(violation_count),
+		"max_violations": MAX_VIOLATIONS,
 	}
+
+
+@frappe.whitelist(methods=["POST"])
+def log_violation(submission, reason=None):
+	"""Record that the student left the exam (tab switch, minimise, exit full screen...)."""
+	user = _require_login()
+	count = _add_violation(submission, user, reason)
+	return {"count": count, "max": MAX_VIOLATIONS}
+
+
+def _add_violation(submission, user, reason):
+	text = VIOLATION_REASONS.get(reason, "Left the exam")
+	entry = "{0}  {1}\n".format(now_datetime().strftime("%Y-%m-%d %H:%M:%S"), text)
+
+	# Single atomic UPDATE on the primary key; only the owner's running attempt is touched.
+	frappe.db.sql(
+		"""
+		update `tabExam Submission`
+		set violation_count = ifnull(violation_count, 0) + 1,
+			violation_log = concat(ifnull(violation_log, ''), %(entry)s)
+		where name = %(name)s and student = %(user)s and status = 'In Progress'
+		""",
+		{"entry": entry, "name": submission, "user": user},
+	)
+	count = frappe.db.get_value(
+		"Exam Submission", {"name": submission, "student": user}, "violation_count"
+	)
+	if count is None:
+		frappe.throw(_("Not permitted"), frappe.PermissionError)
+	return cint(count)
 
 
 @frappe.whitelist(methods=["POST"])
