@@ -92,9 +92,9 @@ def _exam_is_for_student(exam, ctx):
 	)
 
 
-def _submission_name(online_exam, student):
+def _submission_name(exam_paper, student):
 	# One attempt per student per exam, enforced by the primary key.
-	return f"{online_exam}-{student}"
+	return f"{exam_paper}-{student}"
 
 
 # ------------------------------------------------------------------ exam list
@@ -114,7 +114,7 @@ def get_my_exams():
 		"""
 		select name, exam_title, exam_type, subject, section, exam_date, start_datetime, end_datetime,
 			duration_minutes, total_marks, passing_marks, publish_result, max_violations
-		from `tabOnline Exam`
+		from `tabExam Paper`
 		where docstatus = 1
 			and `class` = %(class)s
 			and academic_year = %(ay)s
@@ -137,10 +137,10 @@ def get_my_exams():
 	if names:
 		for s in frappe.get_all(
 			"Exam Submission",
-			filters={"student": ctx.student, "online_exam": ("in", names)},
-			fields=["online_exam", "status", "deadline", "score", "total_marks", "submitted_at"],
+			filters={"student": ctx.student, "exam_paper": ("in", names)},
+			fields=["exam_paper", "status", "deadline", "score", "total_marks", "submitted_at"],
 		):
-			subs[s.online_exam] = s
+			subs[s.exam_paper] = s
 
 	subject_names = _subject_names([e.subject for e in exams])
 
@@ -182,9 +182,9 @@ def get_my_exams():
 		if item["state"] in ("live", "in_progress"):
 			item["max_violations"] = cint(e.max_violations)
 			item["question_count"] = frappe.db.count(
-				"Online Exam Question", {"parent": e.name, "parenttype": "Online Exam"}
+				"Exam Paper Question", {"parent": e.name, "parenttype": "Exam Paper"}
 			)
-			item["instructions"] = frappe.db.get_value("Online Exam", e.name, "instructions") or ""
+			item["instructions"] = frappe.db.get_value("Exam Paper", e.name, "instructions") or ""
 		out.append(item)
 
 	return {"student": ctx, "exams": out}
@@ -204,11 +204,11 @@ def _subject_names(subjects):
 
 
 @frappe.whitelist(methods=["POST"])
-def start_exam(online_exam):
+def start_exam(exam_paper):
 	user, ctx = _require_student()
 	exam = frappe.db.get_value(
-		"Online Exam",
-		online_exam,
+		"Exam Paper",
+		exam_paper,
 		["name", "docstatus", "class", "section", "subject", "academic_year", "exam_title",
 		 "start_datetime", "end_datetime", "shuffle_questions", "max_violations", "total_marks"],
 		as_dict=True,
@@ -228,8 +228,8 @@ def start_exam(online_exam):
 		frappe.throw(_("This exam is over."))
 
 	rows = frappe.get_all(
-		"Online Exam Question",
-		filters={"parent": exam.name, "parenttype": "Online Exam"},
+		"Exam Paper Question",
+		filters={"parent": exam.name, "parenttype": "Exam Paper"},
 		fields=["question", "question_type", "marks", "negative_marks"],
 		order_by="idx asc",
 	)
@@ -241,7 +241,7 @@ def start_exam(online_exam):
 	doc = frappe.get_doc(
 		{
 			"doctype": "Exam Submission",
-			"online_exam": exam.name,
+			"exam_paper": exam.name,
 			"exam_title": exam.exam_title,
 			"subject": exam.subject,
 			"student": ctx.student,
@@ -279,7 +279,7 @@ def start_exam(online_exam):
 
 def _resume(name, user, now):
 	head = frappe.db.get_value(
-		"Exam Submission", name, ["user", "status", "deadline", "online_exam"], as_dict=True
+		"Exam Submission", name, ["user", "status", "deadline", "exam_paper"], as_dict=True
 	)
 	if head.user != user:
 		frappe.throw(_("Not permitted"), frappe.PermissionError)
@@ -291,7 +291,7 @@ def _resume(name, user, now):
 
 	count = _add_violation(name, user, "resume")
 	exam = frappe.db.get_value(
-		"Online Exam", head.online_exam, ["name", "exam_title", "subject", "max_violations", "total_marks"], as_dict=True
+		"Exam Paper", head.exam_paper, ["name", "exam_title", "subject", "max_violations", "total_marks"], as_dict=True
 	)
 	ctx = get_student_context(user)
 	return _paper(name, exam, ctx, get_datetime(head.deadline), now, count)
@@ -323,7 +323,7 @@ def _paper(submission, exam, ctx, deadline, now, violation_count):
 	):
 		options.setdefault(o.parent, []).append(o)
 
-	shuffle_options = cint(frappe.db.get_value("Online Exam", exam.name, "shuffle_options"))
+	shuffle_options = cint(frappe.db.get_value("Exam Paper", exam.name, "shuffle_options"))
 
 	questions = []
 	for r in rows:
@@ -442,7 +442,7 @@ def _own_open_attempt(submission, user, for_update=False):
 	head = frappe.db.get_value(
 		"Exam Submission",
 		submission,
-		["user", "status", "deadline", "online_exam", "violation_count"],
+		["user", "status", "deadline", "exam_paper", "violation_count"],
 		as_dict=True,
 		for_update=for_update,
 	)
@@ -561,7 +561,7 @@ def submit_exam(submission, answers=None, mode=None):
 
 	if head.is_open:
 		_write_answers(submission, answers)
-		max_violations = cint(frappe.db.get_value("Online Exam", head.online_exam, "max_violations"))
+		max_violations = cint(frappe.db.get_value("Exam Paper", head.exam_paper, "max_violations"))
 		if mode == "Proctoring" and not (max_violations and cint(head.violation_count) >= max_violations):
 			mode = "Student"
 		mode = mode if mode in ("Student", "Time Up", "Proctoring") else "Student"
@@ -573,7 +573,7 @@ def submit_exam(submission, answers=None, mode=None):
 
 
 def _result_for_student(doc):
-	exam = frappe.db.get_value("Online Exam", doc.online_exam, ["publish_result", "passing_marks"], as_dict=True)
+	exam = frappe.db.get_value("Exam Paper", doc.exam_paper, ["publish_result", "passing_marks"], as_dict=True)
 	out = {"status": doc.status, "submit_mode": doc.submit_mode}
 	if exam and exam.publish_result and doc.status == "Evaluated":
 		out.update(score=doc.score, total_marks=doc.total_marks)
@@ -591,7 +591,7 @@ def log_violation(submission, reason=None):
 	count = _add_violation(submission, user, reason)
 	max_violations = cint(
 		frappe.db.get_value(
-			"Online Exam", frappe.db.get_value("Exam Submission", submission, "online_exam"), "max_violations"
+			"Exam Paper", frappe.db.get_value("Exam Submission", submission, "exam_paper"), "max_violations"
 		)
 	)
 	return {"count": count, "max": max_violations}

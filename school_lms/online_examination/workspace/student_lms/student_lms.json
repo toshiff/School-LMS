@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\": \"oe_h1\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Online Exam</b></span>\", \"col\": 12}}, {\"id\": \"oe_s1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Question Bank\", \"col\": 3}}, {\"id\": \"oe_s2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Online Exams\", \"col\": 3}}, {\"id\": \"oe_s3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Evaluate Answers\", \"col\": 3}}, {\"id\": \"oe_s4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Submissions\", \"col\": 3}}]",
+ "content": "[{\"id\": \"oe_h1\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Student LMS</b></span>\", \"col\": 12}}, {\"id\": \"oe_s1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Question Bank\", \"col\": 3}}, {\"id\": \"oe_s2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Exam Papers\", \"col\": 3}}, {\"id\": \"oe_s3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Evaluate Answers\", \"col\": 3}}, {\"id\": \"oe_s4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Submissions\", \"col\": 3}}]",
  "creation": "2026-10-10 12:30:00.000000",
  "custom_blocks": [],
  "docstatus": 0,
@@ -10,12 +10,12 @@
  "icon": "education",
  "idx": 0,
  "is_hidden": 0,
- "label": "Online Exam",
+ "label": "Student LMS",
  "links": [],
- "modified": "2026-10-10 12:30:00.000000",
+ "modified": "2026-10-10 13:10:00.000000",
  "modified_by": "Administrator",
- "module": "Online Exam",
- "name": "Online Exam",
+ "module": "Online Examination",
+ "name": "Student LMS",
  "number_cards": [],
  "owner": "Administrator",
  "public": 1,
@@ -46,14 +46,14 @@
   {
    "color": "Green",
    "doc_view": "List",
-   "label": "Online Exams",
-   "link_to": "Online Exam",
+   "label": "Exam Papers",
+   "link_to": "Exam Paper",
    "type": "DocType"
   },
   {
    "color": "Orange",
    "label": "Evaluate Answers",
-   "link_to": "exam-evaluation",
+   "link_to": "answer-evaluation",
    "type": "Page"
   },
   {
@@ -64,5 +64,5 @@
    "type": "DocType"
   }
  ],
- "title": "Online Exam"
+ "title": "Student LMS"
 }

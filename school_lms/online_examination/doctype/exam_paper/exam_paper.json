@@ -143,7 +143,7 @@
    "fieldname": "questions",
    "fieldtype": "Table",
    "label": "Questions",
-   "options": "Online Exam Question",
+   "options": "Exam Paper Question",
    "reqd": 1
   },
   {
@@ -214,7 +214,7 @@
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
-   "options": "Online Exam",
+   "options": "Exam Paper",
    "read_only": 1,
    "no_copy": 1,
    "print_hide": 1
@@ -222,10 +222,10 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-10 12:30:00.000000",
+ "modified": "2026-10-10 13:10:00.000000",
  "modified_by": "Administrator",
- "module": "Online Exam",
- "name": "Online Exam",
+ "module": "Online Examination",
+ "name": "Exam Paper",
  "owner": "Administrator",
  "permissions": [
   {
@@ -285,7 +285,7 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "autoname": "format:OEX-{YYYY}-{#####}",
+ "autoname": "format:EXP-{YYYY}-{#####}",
  "naming_rule": "Expression",
  "is_submittable": 1,
  "title_field": "exam_title",

@@ -10,7 +10,7 @@ from frappe.utils import cint, flt, get_time, getdate, now_datetime
 MAX_DURATION_MINUTES = 24 * 60
 
 
-class OnlineExam(Document):
+class ExamPaper(Document):
 	def validate(self):
 		self.validate_subject_class()
 		self.set_schedule()
@@ -30,7 +30,7 @@ class OnlineExam(Document):
 				"""
 				update `tabExam Submission`
 				set deadline = %(end)s
-				where online_exam = %(exam)s and status = 'In Progress'
+				where exam_paper = %(exam)s and status = 'In Progress'
 				""",
 				{"end": self.end_datetime, "exam": self.name},
 			)
@@ -92,13 +92,13 @@ class OnlineExam(Document):
 
 def on_doctype_update():
 	# Student exam list: exams of a class/year that haven't ended yet.
-	frappe.db.add_index("Online Exam", ["class", "academic_year", "end_datetime"])
+	frappe.db.add_index("Exam Paper", ["class", "academic_year", "end_datetime"])
 
 
 @frappe.whitelist()
 def pick_questions(class_name, subject, count=10, topic=None, question_type=None, difficulty=None, exclude=None):
 	"""Random questions from the bank for the 'Add Questions from Bank' button."""
-	frappe.has_permission("Online Exam", "write", throw=True)
+	frappe.has_permission("Exam Paper", "write", throw=True)
 
 	count = max(1, min(cint(count), 200))
 	if isinstance(exclude, str):

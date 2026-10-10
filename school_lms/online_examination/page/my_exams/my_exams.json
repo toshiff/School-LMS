@@ -4,12 +4,12 @@
  "docstatus": 0,
  "doctype": "Page",
  "idx": 0,
- "modified": "2026-10-10 12:30:00.000000",
+ "modified": "2026-10-10 13:10:00.000000",
  "modified_by": "Administrator",
- "module": "Online Exam",
- "name": "online-exam",
+ "module": "Online Examination",
+ "name": "my-exams",
  "owner": "Administrator",
- "page_name": "online-exam",
+ "page_name": "my-exams",
  "roles": [
   {
    "role": "Student"
@@ -22,5 +22,5 @@
  "standard": "Yes",
  "style": null,
  "system_page": 0,
- "title": "Online Exam"
+ "title": "My Exams"
 }

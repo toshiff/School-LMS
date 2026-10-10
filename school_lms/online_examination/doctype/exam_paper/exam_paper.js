@@ -1,4 +1,4 @@
-frappe.ui.form.on("Online Exam", {
+frappe.ui.form.on("Exam Paper", {
 	setup(frm) {
 		frm.set_query("subject", () => ({
 			filters: frm.doc.class ? { class: frm.doc.class, enabled: 1 } : { enabled: 1 },
@@ -15,11 +15,11 @@ frappe.ui.form.on("Online Exam", {
 		}
 		if (frm.doc.docstatus === 1) {
 			frm.add_custom_button(__("Evaluate Answers"), () => {
-				frappe.route_options = { online_exam: frm.doc.name };
-				frappe.set_route("exam-evaluation");
+				frappe.route_options = { exam_paper: frm.doc.name };
+				frappe.set_route("answer-evaluation");
 			});
 			frm.add_custom_button(__("Submissions"), () => {
-				frappe.set_route("List", "Exam Submission", { online_exam: frm.doc.name });
+				frappe.set_route("List", "Exam Submission", { exam_paper: frm.doc.name });
 			});
 		}
 		show_schedule(frm);
@@ -34,22 +34,20 @@ frappe.ui.form.on("Online Exam", {
 	duration_minutes: show_schedule,
 });
 
+// Shown under "Ends At" (frm.set_intro stacks a new banner on every call in v15).
 function show_schedule(frm) {
 	const d = frm.doc;
-	if (!d.exam_date || !d.start_time || !d.duration_minutes) {
-		frm.set_intro("");
-		return;
-	}
-	const start = moment(`${d.exam_date} ${d.start_time}`);
-	const end = start.clone().add(cint(d.duration_minutes), "minutes");
-	frm.set_intro(
-		__("Exam window: {0} to {1}. A student who joins late only gets the time left until {2}.", [
+	let text = __("Students who join late get only the time left until this moment.");
+	if (d.exam_date && d.start_time && cint(d.duration_minutes) > 0) {
+		const start = moment(`${d.exam_date} ${d.start_time}`);
+		const end = start.clone().add(cint(d.duration_minutes), "minutes");
+		text = __("Exam window: {0} to {1}. A student who joins late only gets the time left until {2}.", [
 			start.format("DD MMM YYYY, hh:mm A"),
 			end.format(end.isSame(start, "day") ? "hh:mm A" : "DD MMM YYYY, hh:mm A"),
 			end.format("hh:mm A"),
-		]),
-		"blue"
-	);
+		]);
+	}
+	frm.set_df_property("end_datetime", "description", text);
 }
 
 function add_questions_dialog(frm) {
@@ -84,7 +82,7 @@ function add_questions_dialog(frm) {
 		primary_action_label: __("Add"),
 		primary_action(values) {
 			frappe.call({
-				method: "school_lms.online_exam.doctype.online_exam.online_exam.pick_questions",
+				method: "school_lms.online_examination.doctype.exam_paper.exam_paper.pick_questions",
 				args: {
 					class_name: frm.doc.class,
 					subject: frm.doc.subject,

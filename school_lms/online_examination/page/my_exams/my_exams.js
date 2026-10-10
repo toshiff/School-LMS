@@ -1,14 +1,14 @@
-frappe.pages["online-exam"].on_page_load = function (wrapper) {
+frappe.pages["my-exams"].on_page_load = function (wrapper) {
 	const page = frappe.ui.make_app_page({
 		parent: wrapper,
-		title: __("Online Exam"),
+		title: __("My Exams"),
 		single_column: true,
 	});
-	wrapper.online_exam = new OnlineExam(page);
+	wrapper.my_exams = new MyExams(page);
 };
 
-frappe.pages["online-exam"].on_page_show = function (wrapper) {
-	const app = wrapper.online_exam;
+frappe.pages["my-exams"].on_page_show = function (wrapper) {
+	const app = wrapper.my_exams;
 	if (app && !app.in_exam) app.load_home();
 };
 
@@ -17,7 +17,7 @@ const oe_esc = (s) => frappe.utils.escape_html(s == null ? "" : String(s));
 const OE_PAD_W = 1000;
 const OE_PAD_H = 625;
 
-class OnlineExam {
+class MyExams {
 	constructor(page) {
 		this.page = page;
 		this.$body = $(`<div class="oe-wrap"></div>`).appendTo(page.main);
@@ -51,7 +51,7 @@ class OnlineExam {
 	// =====================================================================
 	load_home() {
 		this.stop_home_ticker();
-		this.page.set_title(__("Online Exam"));
+		this.page.set_title(__("My Exams"));
 		this.$body.html(`<div class="oe-loading text-muted">${__("Loading your exams…")}</div>`);
 		this.call("get_my_exams")
 			.then((data) => this.render_home(data || {}))
@@ -167,7 +167,7 @@ class OnlineExam {
 
 	start_home_ticker() {
 		const tick = () => {
-			if (frappe.get_route()[0] !== "online-exam") return this.stop_home_ticker();
+			if (frappe.get_route()[0] !== "my-exams") return this.stop_home_ticker();
 			const now = Date.now();
 			let refresh = false;
 			this.$body.find(".oe-count").each((_, el) => {
@@ -243,7 +243,7 @@ class OnlineExam {
 				// Must run directly inside the click, or the browser refuses full screen.
 				this.enter_fullscreen();
 				d.hide();
-				this.call("start_exam", { online_exam: exam.name }, { freeze: true, freeze_message: __("Loading your paper…") })
+				this.call("start_exam", { exam_paper: exam.name }, { freeze: true, freeze_message: __("Loading your paper…") })
 					.then((paper) => paper && this.show_exam(paper))
 					.catch(() => {
 						this.exit_fullscreen();
@@ -745,7 +745,7 @@ class OnlineExam {
 	show_result(res) {
 		this.commit_pad();
 		this.in_exam = false;
-		this.page.set_title(__("Online Exam"));
+		this.page.set_title(__("My Exams"));
 		let body;
 		if (res.score !== undefined) {
 			const verdict = res.passed === undefined ? "" : res.passed ? __("Pass") : __("Fail");
@@ -820,9 +820,9 @@ class OnlineExam {
 		if (!frappe.router || !frappe.router.on) return;
 		frappe.router.on("change", () => {
 			if (!this.lockdown) return;
-			if (frappe.get_route()[0] !== "online-exam") {
+			if (frappe.get_route()[0] !== "my-exams") {
 				this.violation("route");
-				frappe.set_route("online-exam");
+				frappe.set_route("my-exams");
 			}
 		});
 	}

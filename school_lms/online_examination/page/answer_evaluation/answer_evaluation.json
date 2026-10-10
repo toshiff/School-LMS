@@ -4,12 +4,12 @@
  "docstatus": 0,
  "doctype": "Page",
  "idx": 0,
- "modified": "2026-10-10 12:30:00.000000",
+ "modified": "2026-10-10 13:10:00.000000",
  "modified_by": "Administrator",
- "module": "Online Exam",
- "name": "exam-evaluation",
+ "module": "Online Examination",
+ "name": "answer-evaluation",
  "owner": "Administrator",
- "page_name": "exam-evaluation",
+ "page_name": "answer-evaluation",
  "roles": [
   {
    "role": "Teacher"
@@ -28,5 +28,5 @@
  "standard": "Yes",
  "style": null,
  "system_page": 0,
- "title": "Exam Evaluation"
+ "title": "Answer Evaluation"
 }

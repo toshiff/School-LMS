@@ -1,25 +1,25 @@
-frappe.pages["exam-evaluation"].on_page_load = function (wrapper) {
+frappe.pages["answer-evaluation"].on_page_load = function (wrapper) {
 	const page = frappe.ui.make_app_page({
 		parent: wrapper,
-		title: __("Exam Evaluation"),
+		title: __("Answer Evaluation"),
 		single_column: true,
 	});
-	wrapper.exam_evaluation = new ExamEvaluation(page);
+	wrapper.answer_evaluation = new AnswerEvaluation(page);
 };
 
-frappe.pages["exam-evaluation"].on_page_show = function (wrapper) {
-	const ev = wrapper.exam_evaluation;
-	if (ev && frappe.route_options && frappe.route_options.online_exam) {
-		const exam = frappe.route_options.online_exam;
+frappe.pages["answer-evaluation"].on_page_show = function (wrapper) {
+	const ev = wrapper.answer_evaluation;
+	if (ev && frappe.route_options && frappe.route_options.exam_paper) {
+		const exam = frappe.route_options.exam_paper;
 		frappe.route_options = null;
 		ev.exam_field.set_value(exam);
 	}
 };
 
-const EV_METHOD = "school_lms.online_exam.page.exam_evaluation.exam_evaluation.";
+const EV_METHOD = "school_lms.online_examination.page.answer_evaluation.answer_evaluation.";
 const ev_esc = (s) => frappe.utils.escape_html(s == null ? "" : String(s));
 
-class ExamEvaluation {
+class AnswerEvaluation {
 	constructor(page) {
 		this.page = page;
 		this.add_styles();
@@ -38,8 +38,8 @@ class ExamEvaluation {
 			parent: this.$wrap.find(".ev-filter"),
 			df: {
 				fieldtype: "Link",
-				options: "Online Exam",
-				label: __("Online Exam"),
+				options: "Exam Paper",
+				label: __("Exam Paper"),
 				placeholder: __("Select exam"),
 				get_query: () => ({ filters: { docstatus: 1 } }),
 				change: () => this.load_exam(this.exam_field.get_value()),
@@ -57,7 +57,7 @@ class ExamEvaluation {
 		this._loaded = true;
 		frappe.call({
 			method: EV_METHOD + "get_submissions",
-			args: { online_exam: exam },
+			args: { exam_paper: exam },
 			freeze: true,
 			callback: (r) => {
 				this.data = r.message;

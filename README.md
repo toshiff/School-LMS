@@ -17,7 +17,7 @@ Online exams on top of **School Edtech** (`school_edtech`). Requires that app on
   Single Choice (MCQ), Multiple Choice (MSQ), True / False, Fill in the Blank, Numeric (auto-marked);
   Short Answer, Long Answer, Drawing (teacher-marked). Images, negative marks, word limit,
   drawing background (e.g. outline map), model answer / marking guide.
-- **Online Exam** (submittable) – Class, optional Section (empty = all sections), Subject, Academic Year,
+- **Exam Paper** (submittable) – Class, optional Section (empty = all sections), Subject, Academic Year,
   Exam Date + Start Time + Duration. A student who joins late only gets the time left until the end.
   Questions picked by hand or with **Add Questions from Bank** (random by topic/type/difficulty).
   Shuffle questions/options, auto-submit after N times leaving the exam, Publish Result.
@@ -27,10 +27,10 @@ Online exams on top of **School Edtech** (`school_edtech`). Requires that app on
 
 ## Pages
 
-- `/app/online-exam` – student: details, live/upcoming/finished exams with countdowns, exam screen
+- `/app/my-exams` – student: details, live/upcoming/finished exams with countdowns, exam screen
   (question palette, mark for review, autosave every ~25 s + device backup, drawing pad, full-screen lockdown).
-- `/app/exam-evaluation` – teacher: mark subjective and drawing answers, override auto marks, remarks.
-- Workspace **Online Exam** for teachers/admins.
+- `/app/answer-evaluation` – teacher: mark subjective and drawing answers, override auto marks, remarks.
+- Workspace **Student LMS** for teachers/admins.
 
 ## Install
 

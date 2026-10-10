@@ -15,21 +15,21 @@ def _require_evaluator():
 
 
 @frappe.whitelist()
-def get_submissions(online_exam):
+def get_submissions(exam_paper):
 	_require_evaluator()
 	exam = frappe.db.get_value(
-		"Online Exam",
-		online_exam,
+		"Exam Paper",
+		exam_paper,
 		["name", "exam_title", "class", "section", "subject", "total_marks", "passing_marks", "publish_result", "docstatus"],
 		as_dict=True,
 	)
 	if not exam:
-		frappe.throw(_("Online Exam {0} not found").format(online_exam))
+		frappe.throw(_("Exam Paper {0} not found").format(exam_paper))
 	exam.subject_name = frappe.db.get_value("Subject", exam.subject, "subject_name") or exam.subject
 
 	rows = frappe.get_all(
 		"Exam Submission",
-		filters={"online_exam": online_exam},
+		filters={"exam_paper": exam_paper},
 		fields=["name", "student", "student_name", "roll_number", "section", "status", "submit_mode",
 		        "score", "total_marks", "pending_evaluation", "violation_count", "submitted_at"],
 		limit_page_length=5000,
@@ -107,7 +107,7 @@ def get_submission(submission):
 
 	head = {
 		k: doc.get(k)
-		for k in ("name", "online_exam", "exam_title", "student", "student_name", "roll_number", "class", "section",
+		for k in ("name", "exam_paper", "exam_title", "student", "student_name", "roll_number", "class", "section",
 		          "status", "submit_mode", "started_at", "submitted_at", "score", "total_marks",
 		          "pending_evaluation", "violation_count", "violation_log")
 	}
